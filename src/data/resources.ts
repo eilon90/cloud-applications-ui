@@ -1,14 +1,5 @@
 import type { Resource } from "../types";
 
-/**
- * Static catalog of monitored cloud resources. This is never held in state —
- * it stands in for what a real deployment would read from the backend.
- *
- * The set deliberately covers all three providers, all three environments and
- * all four criticality levels, and the names cluster into plausible
- * Applications (payments, billing, identity) with one ungrouped outlier so
- * search, filtering and grouping all have something meaningful to act on.
- */
 export const resources: Resource[] = [
   {
     id: "r-001",
@@ -156,7 +147,6 @@ export const resources: Resource[] = [
   },
 ];
 
-/** Derived lookup — not state, recomputed never. */
 export const resourceById = new Map<string, Resource>(
   resources.map((resource) => [resource.id, resource]),
 );

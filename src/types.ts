@@ -9,7 +9,6 @@ export type Criticality = (typeof CRITICALITIES)[number];
 export interface Resource {
   id: string;
   name: string;
-  /** Provider-specific resource type, e.g. "S3 Bucket", "IAM Role". */
   type: string;
   provider: Provider;
   region: string;

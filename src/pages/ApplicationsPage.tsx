@@ -3,7 +3,6 @@ import { useApplications } from "../context/applicationsContext";
 
 export default function ApplicationsPage() {
   const { id } = useParams<{ id: string }>();
-  // Temporary readout: proves context + localStorage round-trip.
   const { applications, getApplication } = useApplications();
   const selected = getApplication(id);
 

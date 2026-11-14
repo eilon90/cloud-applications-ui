@@ -1,4 +1,9 @@
-import type { Criticality, Environment, Provider } from "../types";
+import type {
+  Criticality,
+  Environment,
+  Provider,
+  Resource,
+} from "../types";
 
 export const PROVIDER_DOT: Record<Provider, string> = {
   AWS: "bg-amber-500",
@@ -18,3 +23,20 @@ export const CRITICALITY_TONE: Record<Criticality, string> = {
   high: "border-orange-200 bg-orange-100 text-orange-800",
   critical: "border-red-200 bg-red-50 text-red-700",
 };
+
+export const PROVIDER_HEX: Record<Provider, string[]> = {
+  AWS: ["#f59e0b", "#b45309", "#fbbf24", "#92400e"],
+  GCP: ["#0ea5e9", "#0369a1", "#38bdf8", "#075985"],
+  Azure: ["#8b5cf6", "#6d28d9", "#a78bfa", "#4c1d95"],
+};
+
+export function assignNodeColors(members: Resource[]): string[] {
+  const seenPerProvider = new Map<Provider, number>();
+
+  return members.map((member) => {
+    const occurrence = seenPerProvider.get(member.provider) ?? 0;
+    seenPerProvider.set(member.provider, occurrence + 1);
+    const palette = PROVIDER_HEX[member.provider];
+    return palette[occurrence % palette.length];
+  });
+}

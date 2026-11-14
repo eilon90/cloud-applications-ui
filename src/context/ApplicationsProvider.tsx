@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { resourceById } from "../data/resources";
 import type { Application } from "../types";
 import { ApplicationsContext } from "./applicationsContext";
 import type {
@@ -34,10 +33,10 @@ function parseApplications(raw: string | null): Application[] {
     if (typeof id !== "string" || typeof name !== "string") return [];
     if (!Array.isArray(resourceIds)) return [];
 
-    const members = resourceIds.filter(
-      (value): value is string =>
-        typeof value === "string" && resourceById.has(value),
+    const ids = resourceIds.filter(
+      (value): value is string => typeof value === "string",
     );
+    const members = [...new Set(ids)];
     if (members.length === 0) return [];
 
     const application: Application = { id, name, resourceIds: members };
@@ -66,6 +65,17 @@ export function ApplicationsProvider({ children }: { children: ReactNode }) {
       // Storage unavailable (private mode, quota): state still works in memory.
     }
   }, [applications]);
+
+  useEffect(() => {
+    function handleStorage(event: StorageEvent) {
+      if (event.storageArea !== window.localStorage) return;
+      if (event.key !== null && event.key !== STORAGE_KEY) return;
+      setApplications(parseApplications(event.newValue));
+    }
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
 
   const createApplication = useCallback((input: NewApplicationInput) => {
     const id = createId();

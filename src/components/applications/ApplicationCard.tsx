@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   applicationMembers,
   highestCriticality,
+  missingMemberCount,
   totalOpenIssues,
   usedProviders,
 } from "../../lib/applications";
@@ -13,6 +14,7 @@ export function ApplicationCard({ application }: { application: Application }) {
   const members = applicationMembers(application);
   const criticality = highestCriticality(members);
   const openIssues = totalOpenIssues(members);
+  const missing = missingMemberCount(application);
 
   return (
     <Link
@@ -48,6 +50,9 @@ export function ApplicationCard({ application }: { application: Application }) {
         <span>
           {openIssues} open {openIssues === 1 ? "issue" : "issues"}
         </span>
+        {missing > 0 && (
+          <span className="text-amber-600">{missing} unavailable</span>
+        )}
       </div>
     </Link>
   );

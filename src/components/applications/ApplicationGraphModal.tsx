@@ -1,4 +1,8 @@
-import { totalOpenIssues, usedProviders } from "../../lib/applications";
+import {
+  missingMemberCount,
+  totalOpenIssues,
+  usedProviders,
+} from "../../lib/applications";
 import { PROVIDER_DOT } from "../../lib/display";
 import type { Application, Resource } from "../../types";
 import { Modal } from "../ui/Modal";
@@ -13,6 +17,8 @@ export function ApplicationGraphModal({
   members: Resource[];
   onClose: () => void;
 }) {
+  const missing = missingMemberCount(application);
+
   return (
     <Modal
       labelledBy="application-graph-title"
@@ -46,6 +52,9 @@ export function ApplicationGraphModal({
               ))}
             </span>
             <span>{totalOpenIssues(members)} open issues</span>
+            {missing > 0 && (
+              <span className="text-amber-600">{missing} unavailable</span>
+            )}
           </div>
         </div>
 

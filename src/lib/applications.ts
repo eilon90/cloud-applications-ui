@@ -1,5 +1,5 @@
 import { resourceById } from "../data/resources";
-import { CRITICALITIES, PROVIDERS } from "../types";
+import { CRITICALITY_RANK, PROVIDERS } from "../types";
 import type { Application, Criticality, Provider, Resource } from "../types";
 
 export function applicationMembers(application: Application): Resource[] {
@@ -15,7 +15,7 @@ export function highestCriticality(
   return members.reduce<Criticality | undefined>(
     (highest, member) =>
       highest === undefined ||
-      CRITICALITIES.indexOf(member.criticality) > CRITICALITIES.indexOf(highest)
+      CRITICALITY_RANK[member.criticality] > CRITICALITY_RANK[highest]
         ? member.criticality
         : highest,
     undefined,
@@ -26,6 +26,10 @@ export function usedProviders(members: Resource[]): Provider[] {
   return PROVIDERS.filter((provider) =>
     members.some((member) => member.provider === provider),
   );
+}
+
+export function missingMemberCount(application: Application): number {
+  return application.resourceIds.filter((id) => !resourceById.has(id)).length;
 }
 
 export function totalOpenIssues(members: Resource[]): number {

@@ -15,7 +15,6 @@ export default function ResourcesPage() {
   const { filters, isFiltered, setFilter, setQuery, clearAll } =
     useResourceFilters();
 
-  const [searchValue, setSearchValue] = useState(filters.q);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [created, setCreated] = useState<{ id: string; name: string } | null>(
@@ -74,11 +73,6 @@ export default function ResourcesPage() {
     setVisibleSelected(!someVisibleSelected);
   }
 
-  function resetSearchAndFilters() {
-    setSearchValue("");
-    clearAll();
-  }
-
   function handleCreate(name: string, description: string) {
     const id = createApplication({
       name,
@@ -88,7 +82,7 @@ export default function ResourcesPage() {
     setSelectedIds(new Set());
     setIsDialogOpen(false);
     setCreated({ id, name });
-    resetSearchAndFilters();
+    clearAll();
   }
 
   return (
@@ -126,11 +120,7 @@ export default function ResourcesPage() {
       )}
 
       <div className="space-y-4 rounded-xl border border-line bg-surface p-4">
-        <SearchBar
-          value={searchValue}
-          onValueChange={setSearchValue}
-          onSearch={setQuery}
-        />
+        <SearchBar query={filters.q} onSearch={setQuery} />
         <FiltersBar filters={filters} onFilterChange={setFilter} />
       </div>
 
@@ -165,7 +155,7 @@ export default function ResourcesPage() {
           </p>
           <button
             type="button"
-            onClick={resetSearchAndFilters}
+            onClick={clearAll}
             disabled={!isFiltered}
             className="mt-4 rounded-md border border-line px-3 py-1.5 text-sm font-medium text-ink-soft hover:bg-canvas disabled:opacity-40"
           >

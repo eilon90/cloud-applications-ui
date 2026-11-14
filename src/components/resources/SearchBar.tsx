@@ -7,23 +7,28 @@ const LISTBOX_ID = "resource-search-suggestions";
 const optionId = (index: number) => `resource-search-option-${index}`;
 
 export function SearchBar({
-  value,
-  onValueChange,
+  query,
   onSearch,
 }: {
-  value: string;
-  onValueChange: (value: string) => void;
+  query: string;
   onSearch: (value: string) => void;
 }) {
+  const [draft, setDraft] = useState(query);
+  const [appliedQuery, setAppliedQuery] = useState(query);
   const [isOpen, setIsOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  const debouncedValue = useDebounce(value, 300);
+  if (appliedQuery !== query) {
+    setAppliedQuery(query);
+    setDraft(query);
+  }
+
+  const debouncedDraft = useDebounce(draft, 300);
 
   const suggestions = useMemo(
-    () => suggestResources(resources, debouncedValue),
-    [debouncedValue],
+    () => suggestResources(resources, debouncedDraft),
+    [debouncedDraft],
   );
 
   const activeIndex = suggestions.findIndex(
@@ -44,7 +49,7 @@ export function SearchBar({
   }
 
   function commit(nextValue: string) {
-    onValueChange(nextValue);
+    setDraft(nextValue);
     onSearch(nextValue);
     close();
   }
@@ -72,8 +77,8 @@ export function SearchBar({
     if (event.key === "Escape") {
       if (showSuggestions) {
         close();
-      } else if (value !== "") {
-        onValueChange("");
+      } else if (draft !== query) {
+        setDraft(query);
       }
       return;
     }
@@ -87,7 +92,7 @@ export function SearchBar({
       onSubmit={(event) => {
         event.preventDefault();
         const active = activeIndex >= 0 ? suggestions[activeIndex] : undefined;
-        commit(active ? active.name : value);
+        commit(active ? active.name : draft);
       }}
     >
       <div className="relative flex-1">
@@ -106,9 +111,9 @@ export function SearchBar({
             activeIndex >= 0 ? optionId(activeIndex) : undefined
           }
           placeholder="Search resources by name"
-          value={value}
+          value={draft}
           onChange={(event) => {
-            onValueChange(event.target.value);
+            setDraft(event.target.value);
             setIsOpen(true);
           }}
           onKeyDown={handleKeyDown}

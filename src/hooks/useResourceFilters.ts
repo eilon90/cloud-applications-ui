@@ -1,25 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CRITICALITIES, ENVIRONMENTS, PROVIDERS } from "../types";
+import { ALL, FILTER_OPTIONS } from "../lib/filters";
+import type { FilterKey, FilterValue, ResourceFilters } from "../lib/filters";
 import type { Criticality, Environment, Provider } from "../types";
-
-export const ALL = "all";
-
-export type FilterValue<T extends string> = T | typeof ALL;
-export type FilterKey = "provider" | "environment" | "criticality";
-
-export interface ResourceFilters {
-  q: string;
-  provider: FilterValue<Provider>;
-  environment: FilterValue<Environment>;
-  criticality: FilterValue<Criticality>;
-}
-
-export const FILTER_OPTIONS: Record<FilterKey, readonly string[]> = {
-  provider: PROVIDERS,
-  environment: ENVIRONMENTS,
-  criticality: CRITICALITIES,
-};
 
 function readFilter<T extends string>(
   params: URLSearchParams,

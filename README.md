@@ -49,3 +49,9 @@ npm run lint
 - Sorting for both lists (e.g. by criticality, open issues, name, creation date).
 - Tests: unit tests for filtering, graph layout and the debounce hook, plus an integration test for the select → create → view flow.
 - Editing and deleting applications.
+
+## Where I used AI
+
+- **Specifying the plan**: I wrote a detailed spec covering stack, routes, URL schema, state model and UX behavior, had an AI review it, and fixed the contradictions and gaps it found before any code was written.
+- **Implementation**: An AI coding agent built the project from that spec in plan mode. I reviewed the plan before approving it, and reviewed the code it produced. In addition, I used a different agent to review the code, beside my review.
+

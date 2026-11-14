@@ -56,18 +56,22 @@ export default function ResourcesPage() {
     });
   }
 
-  function toggleAllVisible() {
+  function setVisibleSelected(selected: boolean) {
     setSelectedIds((previous) => {
       const next = new Set(previous);
       for (const resource of visibleResources) {
-        if (allVisibleSelected) {
-          next.delete(resource.id);
-        } else {
+        if (selected) {
           next.add(resource.id);
+        } else {
+          next.delete(resource.id);
         }
       }
       return next;
     });
+  }
+
+  function toggleHeaderCheckbox() {
+    setVisibleSelected(!someVisibleSelected);
   }
 
   function resetSearchAndFilters() {
@@ -88,7 +92,7 @@ export default function ResourcesPage() {
   }
 
   return (
-    <section className="space-y-4">
+    <section className="flex min-h-0 flex-1 flex-col gap-4">
       <div>
         <h2 className="text-lg font-semibold text-ink">Resources</h2>
         <p className="mt-0.5 text-ink-muted">
@@ -135,20 +139,22 @@ export default function ResourcesPage() {
         hiddenCount={hiddenCount}
         visibleCount={visibleResources.length}
         allVisibleSelected={allVisibleSelected}
-        onSelectAllVisible={toggleAllVisible}
+        onSelectAllVisible={() => setVisibleSelected(true)}
         onClearSelection={() => setSelectedIds(new Set())}
         onCreateApplication={() => setIsDialogOpen(true)}
       />
 
       {visibleResources.length > 0 ? (
-        <ResourcesTable
-          resources={visibleResources}
-          selectedIds={selectedIds}
-          allVisibleSelected={allVisibleSelected}
-          someVisibleSelected={someVisibleSelected}
-          onToggleResource={toggleResource}
-          onToggleAllVisible={toggleAllVisible}
-        />
+        <div className="min-h-0 flex-1">
+          <ResourcesTable
+            resources={visibleResources}
+            selectedIds={selectedIds}
+            allVisibleSelected={allVisibleSelected}
+            someVisibleSelected={someVisibleSelected}
+            onToggleResource={toggleResource}
+            onToggleAllVisible={toggleHeaderCheckbox}
+          />
+        </div>
       ) : (
         <div className="rounded-xl border border-dashed border-line bg-surface p-10 text-center">
           <p className="font-medium text-ink">

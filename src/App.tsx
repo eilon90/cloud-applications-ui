@@ -9,9 +9,9 @@ const TABS = [
 
 function App() {
   return (
-    <div className="min-h-svh">
-      <header className="border-b border-line bg-surface">
-        <div className="mx-auto max-w-6xl px-6 pt-6">
+    <div className="flex h-svh flex-col">
+      <header className="shrink-0 border-b border-line bg-surface">
+        <div className="mx-auto max-w-[1400px] px-6 pt-6">
           <h1 className="text-base font-semibold tracking-tight text-ink">
             Gambit
           </h1>
@@ -20,7 +20,7 @@ function App() {
           </p>
         </div>
 
-        <nav aria-label="Main" className="mx-auto max-w-6xl px-6">
+        <nav aria-label="Main" className="mx-auto max-w-[1400px] px-6">
           <ul className="-mb-px flex gap-1 pt-5">
             {TABS.map((tab) => (
               <li key={tab.to}>
@@ -43,7 +43,7 @@ function App() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-8">
+      <main className="mx-auto flex min-h-0 w-full max-w-[1400px] flex-1 flex-col px-6 py-8">
         <Routes>
           <Route path="/" element={<Navigate to="/resources" replace />} />
           <Route path="/resources" element={<ResourcesPage />} />

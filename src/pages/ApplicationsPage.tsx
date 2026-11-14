@@ -17,7 +17,7 @@ export default function ApplicationsPage() {
   }, [id, selected, navigate]);
 
   return (
-    <section className="space-y-4">
+    <section className="min-h-0 flex-1 space-y-4 overflow-y-auto">
       <div>
         <h2 className="text-lg font-semibold text-ink">Applications</h2>
         <p className="mt-0.5 text-ink-muted">
@@ -41,7 +41,7 @@ export default function ApplicationsPage() {
           </Link>
         </div>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {applications.map((application) => (
             <li key={application.id} className="flex">
               <ApplicationCard application={application} />
